@@ -3,6 +3,7 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { lib, config, pkgs, ... }:let
+	nixos-hardware = builtins.fetchTarball "https://github.com/nixos/nix-hardware/archive/master.tar.gz";
 	flake-compat = builtins.fetchTarball "https://github.com/edolstra/flake-compat/archive/master.tar.gz";
 	hyprland = (import flake-compat {
 		src = builtins.fetchTarball "https://github.com/hyprwm/Hyprland/archive/master.tar.gz";
@@ -20,11 +21,13 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       <home-manager/nixos>
-      hyprland.nixosModules.default
+      <nixos-hardware/common/cpu/intel>
+      <nixos-hardware/common/gpu/intel>
+      <nixos-hardware/system76>
     ];
 
   # Bootloader
-  hardware.system76.enableAll = true;
+  #hardware.system76.enableAll = true;
 
   systemd.services.system76-power.serviceConfig.Restart = lib.mkForce "always";
   systemd.services.system76-power.serviceConfig.RestartSec = 3;
@@ -33,7 +36,7 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "megalith"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -62,9 +65,14 @@ in
   };
 
   # Enable the X11 windowing system.
+  services.xserver.desktopManager.plasma5.enable = true;
+  services.xserver.desktopManager.plasma5.useQtScaling = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.defaultSession = "plasmawayland";
+  services.flatpak.enable = true;
   services.xserver.enable = true;
   services.greetd = {
-  	enable = true;
+  	enable = false;
   	restart = false;
   	settings = {
   		default_session = {
@@ -134,6 +142,9 @@ in
 
   home-manager.useGlobalPkgs = true;
   home-manager.users.derek = {
+	home.sessionVariables = rec {
+		XDG_DATA_DIRS  = "/home/derek/.local/share/flatpak/exports/share/applications:$XDG_DATA_DIR";
+ 	};
 	home.stateVersion = "23.05";
 	home.sessionVariables = {
 		MOZ_ENABLE_WAYLAND =  "1";
@@ -155,6 +166,8 @@ in
 		swaylock-effects
 		pavucontrol
 		git
+		steam
+		moonlight-qt
 	];
 
 	programs = {
@@ -201,6 +214,7 @@ in
      waybar
      hyprpaper
      doas
+     dconf
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -213,6 +227,7 @@ in
 
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.ksshaskpass.out}/bin/ksshaskpass";
   programs.mosh.enable = true;
+  programs.dconf.enable = true;
 
   # List services that you want to enable:
 
@@ -234,6 +249,17 @@ in
   system.stateVersion = "23.05"; # Did you read the comment?
 
   nixpkgs.overlays = [ hyprland.overlays.default ];
+
+  hardware.opengl = {
+	enable = true;
+	extraPackages = with pkgs; [
+		intel-media-driver
+		vaapiIntel
+		vaapiVdpau
+		libvdpau-va-gl
+	];
+  };
+
   programs.hyprland = {
     enable = true;
     package = pkgs.hyprland;
