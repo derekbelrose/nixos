@@ -166,7 +166,6 @@ in
 		swaylock-effects
 		pavucontrol
 		git
-		steam
 		moonlight-qt
 	];
 
