@@ -167,6 +167,11 @@ in
 		pavucontrol
 		git
 		moonlight-qt
+		kate
+		kmail
+		protonup-qt
+		obsidian
+		anytype
 	];
 
 	programs = {
@@ -214,6 +219,7 @@ in
      hyprpaper
      doas
      dconf
+     podman
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -224,6 +230,20 @@ in
   #   enableSSHSupport = true;
   # };
 
+  services.udev.extraRules = ''
+# file  /etc/udev/rules.d/99-steam-controller-perms.rules
+# Valve USB devices
+SUBSYSTEM=="usb", ATTRS{idVendor}=="28de", MODE="0666"
+# Steam Controller udev write access
+KERNEL=="uinput", SUBSYSTEM=="misc", MODE="0660", GROUP="input"
+
+# Valve HID devices over USB hidraw
+KERNEL=="hidraw*", ATTRS{idVendor}=="28de", MODE="0666"
+
+# Valve HID devices over bluetooth hidraw
+KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
+
+  '';
   programs.ssh.askPassword = pkgs.lib.mkForce "${pkgs.ksshaskpass.out}/bin/ksshaskpass";
   programs.mosh.enable = true;
   programs.dconf.enable = true;
