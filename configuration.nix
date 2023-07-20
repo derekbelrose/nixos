@@ -15,6 +15,8 @@
         
         	systemd-run --user --scope --collect --quiet --unit=hyprland systemd-cat --identifier=hyprland ${pkgs.hyprland}/bin/Hyprland $@
         '';
+	unstable = import (builtins.fetchTarball "https://github.com/nixos/nixpkgs/archive/a35621603c2d8417ca3f371f0e3bcc66a58f2aad.tar.gz")
+	{ config = config.nixpkgs.config; };
 in
 {
   imports =
@@ -68,7 +70,9 @@ in
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.plasma5.useQtScaling = true;
   services.xserver.displayManager.sddm.enable = true;
+  services.xserver.displayManager.lightdm.enable = false;
   services.xserver.displayManager.defaultSession = "plasmawayland";
+  services.xserver.desktopManager.pantheon.enable = true;
   services.flatpak.enable = true;
   services.xserver.enable = true;
   services.greetd = {
@@ -150,28 +154,28 @@ in
 		MOZ_ENABLE_WAYLAND =  "1";
 	};
 	home.packages = with pkgs; [
-		htop
-		slack
-		vim
-		firefox-wayland
-		lm_sensors
-		spotify
-		tmux
-		bitwarden
-		bitwarden-cli
-		kitty
-		chromium
-		wofi
-		swayidle
-		swaylock-effects
-		pavucontrol
-		git
-		moonlight-qt
-		kate
-		kmail
-		protonup-qt
-		obsidian
-		anytype
+               htop
+               slack
+               vim
+               firefox-wayland
+               lm_sensors
+               spotify
+               tmux
+               bitwarden
+               bitwarden-cli
+               kitty
+               chromium
+               wofi
+               swayidle
+               swaylock-effects
+               pavucontrol
+               git
+               moonlight-qt
+               kate
+               kmail
+               protonup-qt
+               unstable.obsidian
+               unstable.anytype
 	];
 
 	programs = {
@@ -219,7 +223,9 @@ in
      hyprpaper
      doas
      dconf
-     podman
+     fuse
+     distrobox
+     vscode
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -248,6 +254,8 @@ KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
   programs.mosh.enable = true;
   programs.dconf.enable = true;
 
+  virtualisation.containers.enable = true;
+  virtualisation.podman.enable = true;
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
@@ -284,4 +292,5 @@ KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
     package = pkgs.hyprland;
     xwayland.hidpi = true;
   };
+
 }
