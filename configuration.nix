@@ -70,31 +70,13 @@ in
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.desktopManager.plasma5.useQtScaling = true;
   services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.lightdm.enable = false;
   services.xserver.displayManager.defaultSession = "plasmawayland";
-  services.xserver.desktopManager.pantheon.enable = true;
   services.flatpak.enable = true;
   services.xserver.enable = true;
-  services.greetd = {
-  	enable = false;
-  	restart = false;
-  	settings = {
-  		default_session = {
-  			command = "${lib.makeBinPath [ pkgs.greetd.tuigreet ] }/tuigreet --time --user-menu-max-uid=30000 --user-menu --asterisks -g Welcome --cmd ${hyprRun}";
-  			user = "greeter";
-  		};
-  		initial_session = {
-  			command = "${lib.makeBinPath [ pkgs.greetd.tuigreet ] }/tuigreet --time --user-menu-max-uid=30000 --user-menu --asterisks -g Welcome --cmd ${hyprRun}";
-  			user = "greeter";
-		};
-  	};
-  };	
+
   # Enable the GNOME Desktop Environment.
   services.power-profiles-daemon.enable = false;
 
-  environment.etc."greetd/environments".text = ''
-	hyprland
-  '';
   services.openssh = {
 	enable = true;
 	settings.PasswordAuthentication = true;
@@ -220,7 +202,6 @@ in
   #  wget
      wireplumber
      waybar
-     hyprpaper
      doas
      dconf
      fuse
@@ -275,8 +256,6 @@ KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
 
-  nixpkgs.overlays = [ hyprland.overlays.default ];
-
   hardware.opengl = {
 	enable = true;
 	extraPackages = with pkgs; [
@@ -285,12 +264,6 @@ KERNEL=="hidraw*", KERNELS=="*28DE:*", MODE="0666"
 		vaapiVdpau
 		libvdpau-va-gl
 	];
-  };
-
-  programs.hyprland = {
-    enable = true;
-    package = pkgs.hyprland;
-    xwayland.hidpi = true;
   };
 
 }
