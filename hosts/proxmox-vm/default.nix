@@ -16,6 +16,8 @@
     ];
   };
 
+  security.sudo.wheelNeedsPassword = false;
+
   # Give udev extra time to populate /dev/disk/by-partlabel in early boot.
   boot.kernelParams = [ "rootwait" ];
 
