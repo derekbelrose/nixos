@@ -2,12 +2,11 @@
 {
   imports = [
     ../../modules/base.nix
-    ../../modules/profiles/virtual-guest.nix
     ./disko.nix
   ];
 
-  networking.hostName = "proxmox-vm";
+  networking.hostName = "baremetal-01";
 
   # Override per-host when the boot disk differs.
-  my.disko.device = lib.mkDefault "/dev/sda";
+  my.disko.device = lib.mkDefault "/dev/nvme0n1";
 }
