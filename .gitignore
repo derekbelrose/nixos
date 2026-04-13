@@ -1,0 +1,12 @@
+# Nix build artifacts
+result
+result-*
+
+# Direnv
+.direnv/
+
+# Local environment and editor files
+.envrc
+*.swp
+*.swo
+*~
