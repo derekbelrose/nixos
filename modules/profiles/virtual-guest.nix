@@ -13,4 +13,9 @@
     "virtio_scsi"
     "xhci_pci"
   ];
+
+  boot.initrd.kernelModules = lib.mkDefault [
+    "sd_mod"
+    "virtio_scsi"
+  ];
 }
