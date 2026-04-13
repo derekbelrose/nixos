@@ -5,6 +5,8 @@
   # Sensible defaults for virtualized Linux guests.
   boot.initrd.availableKernelModules = lib.mkDefault [
     "ahci"
+    "scsi_mod"
+    "sd_mod"
     "sr_mod"
     "virtio_blk"
     "virtio_pci"
