@@ -8,6 +8,14 @@
 
   networking.hostName = "proxmox-vm";
 
+  users.users.derek = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwZk9cO3UssUrAfYuTYa6xeoZZYZMy4GMSu97eLSq1V derek@rover"
+    ];
+  };
+
   # Give udev extra time to populate /dev/disk/by-partlabel in early boot.
   boot.kernelParams = [ "rootwait" ];
 
