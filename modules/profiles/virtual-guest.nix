@@ -3,7 +3,7 @@
   services.qemuGuest.enable = true;
 
   # Sensible defaults for virtualized Linux guests.
-  boot.initrd.availableKernelModules = lib.mkDefault [
+  boot.initrd.availableKernelModules = lib.mkAfter [
     "ahci"
     "scsi_mod"
     "sd_mod"
@@ -14,7 +14,7 @@
     "xhci_pci"
   ];
 
-  boot.initrd.kernelModules = lib.mkDefault [
+  boot.initrd.kernelModules = lib.mkAfter [
     "ext4"
     "scsi_mod"
     "sd_mod"
