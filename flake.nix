@@ -4,15 +4,19 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     disko.url = "github:nix-community/disko";
+    openclaw.url = "github:openclaw/nix-openclaw";
 
     disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, disko, ... }:
+  outputs = { nixpkgs, disko, openclaw, ... }:
     let
       mkHost = hostPath:
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = {
+            inherit openclaw;
+          };
           modules = [
             disko.nixosModules.disko
             hostPath
