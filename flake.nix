@@ -8,15 +8,21 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { nixpkgs, disko, ... }: {
-    nixosConfigurations = {
-      proxmox-vm = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          disko.nixosModules.disko
-          ./hosts/proxmox-vm/default.nix
-        ];
+  outputs = { nixpkgs, disko, ... }:
+    let
+      mkHost = hostPath:
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            hostPath
+          ];
+        };
+    in
+    {
+      nixosConfigurations = {
+        proxmox-vm = mkHost ./hosts/proxmox-vm;
+        baremetal-01 = mkHost ./hosts/baremetal-01;
       };
     };
-  };
 }
