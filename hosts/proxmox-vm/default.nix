@@ -3,6 +3,7 @@
   imports = [
     ../../modules/base.nix
     ../../modules/profiles/virtual-guest.nix
+    ./lore.nix
     ./disko.nix
   ];
 
