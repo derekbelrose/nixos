@@ -1,5 +1,9 @@
 { lib, pkgs, ... }:
 {
+  imports = [
+    ./services/openclaw.nix
+  ];
+
   networking.useDHCP = lib.mkDefault true;
 
   time.timeZone = lib.mkDefault "UTC";

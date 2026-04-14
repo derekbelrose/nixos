@@ -3,7 +3,6 @@
   imports = [
     ../../modules/base.nix
     ../../modules/profiles/virtual-guest.nix
-    ./lore.nix
     ./disko.nix
   ];
 
@@ -18,6 +17,11 @@
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  my.openclaw = {
+    enable = true;
+    user = "derek";
+  };
 
   # Give udev extra time to populate /dev/disk/by-partlabel in early boot.
   boot.kernelParams = [ "rootwait" ];

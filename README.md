@@ -9,7 +9,7 @@ Baseline flake for managing NixOS hosts with shared modules and host-specific pr
 - DHCP networking
 - `qemu-guest-agent` enabled
 - `tailscale` enabled
-- OpenClaw host integration (`openclaw` package, activation-managed `~/.openclaw`, user gateway service)
+- OpenClaw enabled via shared module (`my.openclaw`)
 
 - `baremetal-01` (UEFI)
 - single-disk disko layout (GPT, 512M ESP, 4G swap, ext4 root)
@@ -37,7 +37,21 @@ sudo nixos-install --flake .#baremetal-01
 - Keep virtual-only settings in `modules/profiles/virtual-guest.nix`.
 - Add future bare-metal hosts by importing `modules/base.nix` without the virtual profile.
 
-## OpenClaw Verification (`proxmox-vm`)
+## OpenClaw Module
+
+OpenClaw support lives in `modules/services/openclaw.nix` and is imported via `modules/base.nix`.
+
+Enable per host:
+
+```nix
+my.openclaw = {
+  enable = true;
+  user = "derek";
+  # gatewayPort = 18789;
+};
+```
+
+Verification:
 
 ```bash
 which openclaw
