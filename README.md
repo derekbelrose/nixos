@@ -9,6 +9,7 @@ Baseline flake for managing NixOS hosts with shared modules and host-specific pr
 - DHCP networking
 - `qemu-guest-agent` enabled
 - `tailscale` enabled
+- OpenClaw enabled via shared module (`my.openclaw`)
 
 - `baremetal-01` (UEFI)
 - single-disk disko layout (GPT, 512M ESP, 4G swap, ext4 root)
@@ -44,3 +45,28 @@ sudo nixos-install --flake .#baremetal-01
 - Pre-commit hook is configured in `.pre-commit-config.yaml` (run `pre-commit install`).
 - Reusable repo playbooks live in `skills/`.
 - Start with `skills/README.md` to pick the right workflow.
+
+## OpenClaw Module
+
+OpenClaw support lives in `modules/services/openclaw.nix` and is imported via `modules/base.nix`.
+
+Enable per host:
+
+```nix
+my.openclaw = {
+  enable = true;
+  user = "derek";
+  # gatewayPort = 18789;
+};
+```
+
+Verification:
+
+```bash
+which openclaw
+ls -la ~/.openclaw
+stat ~/.openclaw/openclaw-token.txt
+systemctl --user status openclaw-gateway
+journalctl --user -u openclaw-gateway -n 100
+curl -sS http://127.0.0.1:18789
+```
