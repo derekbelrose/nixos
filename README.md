@@ -11,6 +11,13 @@ Baseline flake for managing NixOS hosts with shared modules and host-specific pr
 - `tailscale` enabled
 - OpenClaw enabled via shared module (`my.openclaw`)
 
+- `agent-server` (SeaBIOS + q35)
+- single-disk disko layout (GPT, BIOS boot partition, 4G swap, ext4 root)
+- DHCP networking
+- `qemu-guest-agent` enabled
+- `tailscale` enabled
+- OpenClaw enabled via shared module (`my.openclaw`)
+
 - `baremetal-01` (UEFI)
 - single-disk disko layout (GPT, 512M ESP, 4G swap, ext4 root)
 - DHCP networking
@@ -28,6 +35,13 @@ For `baremetal-01`, use:
 ```bash
 sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ./hosts/baremetal-01/disko.nix
 sudo nixos-install --flake .#baremetal-01
+```
+
+For `agent-server`, use:
+
+```bash
+sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- --mode disko ./hosts/agent-server/disko.nix
+sudo nixos-install --flake .#agent-server
 ```
 
 ## Notes

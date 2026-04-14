@@ -26,6 +26,7 @@
     {
       nixosConfigurations = {
         proxmox-vm = mkHost ./hosts/proxmox-vm;
+        agent-server = mkHost ./hosts/agent-server;
         baremetal-01 = mkHost ./hosts/baremetal-01;
       };
     };
