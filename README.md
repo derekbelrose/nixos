@@ -37,6 +37,15 @@ sudo nixos-install --flake .#baremetal-01
 - Keep virtual-only settings in `modules/profiles/virtual-guest.nix`.
 - Add future bare-metal hosts by importing `modules/base.nix` without the virtual profile.
 
+## Local Skills
+
+- Start from `SKILL.md` for progressive-disclosure routing.
+- See `SKILL-GUIDE.md` for the agent-wide router pattern.
+- Validate router structure with `python3 scripts/check_skill_router.py`.
+- Pre-commit hook is configured in `.pre-commit-config.yaml` (run `pre-commit install`).
+- Reusable repo playbooks live in `skills/`.
+- Start with `skills/README.md` to pick the right workflow.
+
 ## OpenClaw Module
 
 OpenClaw support lives in `modules/services/openclaw.nix` and is imported via `modules/base.nix`.

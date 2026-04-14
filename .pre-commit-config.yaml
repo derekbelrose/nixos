@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: check-skill-router
+        name: check skill router structure
+        entry: python3 scripts/check_skill_router.py
+        language: system
+        pass_filenames: false
+        files: ^SKILL\.md$
